@@ -6,10 +6,14 @@ def kbpressevent( event ):
     #print(event)
     
     global raw_press
-    raw_press.write(str(event)+"\n")
+    #When the key is Backspace, it is represented by a prefix "-" in the file. So that line and the preevious line is not to be considered
+    if event.Ascii == 8:
+        raw_press.write("-"+ str(event)+"\n")
+    else:
+        raw_press.write(str(event)+"\n")
     
     #If the ascii value matches enter, terminate the while loop
-    if event.Ascii == 0:
+    if event.Ascii == 13:
         global running
         running = False
 
@@ -18,7 +22,11 @@ def kbreleaseevent( event ):
     #print(event)
 
     global raw_release
-    raw_release.write(str(event)+"\n")
+    #When the key is Backspace, it is represented by a prefix "-" in the file. So that line and the preevious line is not to be considered
+    if event.Ascii == 8:
+        raw_release.write("-"+ str(event)+"\n")
+    else:
+        raw_release.write(str(event)+"\n")
 
 #Create hookmanager
 hookman = pyxhook.HookManager()
