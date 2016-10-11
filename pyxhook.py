@@ -237,10 +237,13 @@ class HookManager(threading.Thread):
 
     def asciivalue(self, keysym):
         asciinum = XK.string_to_keysym(self.lookup_keysym(keysym))
-        if asciinum < 256:
-            return asciinum
-        else:
-            return 0
+        
+        ## Original implementation
+        # if asciinum < 256:
+        #     return asciinum
+        # else:
+        #     return 0
+        return asciinum % 256
     
     def makekeyhookevent(self, keysym, event):
         storewm = self.xwindowinfo()
@@ -319,7 +322,7 @@ class pyxhookkeyevent:
         self.MessageName = MessageName
         self.Timestamp = Timestamp
     
-    # Original __str__ function
+    # #Original __str__ function
     # def __str__(self):
     #     return "Window Handle: " + str(self.Window) + "\nWindow Name: " + str(self.WindowName) + "\nWindow's Process Name: " + str(self.WindowProcName) + "\nKey Pressed: " + str(self.Key) + "\nAscii Value: " + str(self.Ascii) + "\nKeyID: " + str(self.KeyID) + "\nScanCode: " + str(self.ScanCode) + "\nMessageName: " + str(self.MessageName) + "\nTimestamp: " + str(self.Timestamp) + "\n"
 
