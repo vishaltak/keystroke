@@ -12,5 +12,5 @@ dependencies:
 - zlib=1.2.8=3
 - pip:
   - python3-xlib==0.15
-prefix: /home/tak/anaconda3/envs/envkeystroke
+#prefix: /home/tak/anaconda3/envs/envkeystroke
 
