@@ -51,3 +51,7 @@ while running:
 
 #Close the listener when we are done
 hookman.cancel()
+
+#Closed the files
+raw_press.close()
+raw_release.close()
