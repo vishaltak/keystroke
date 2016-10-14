@@ -25,10 +25,15 @@ def kbreleaseevent( event ):
     if event.Ascii == 13:
         global running
         running = False
+    
+#Open the files to enter the data
+raw_press = open("<file_location>" , "w")
+raw_release = open("<file_location>", "w")
+#raw_press = open("/home/tak/Desktop/keystroke/data/raw_press.txt" , "w")
+#raw_release = open("/home/tak/Desktop/keystroke/data/raw_release.txt", "w")
 
 #Create hookmanager
 hookman = pyxhook.HookManager()
-
 #Define our callback to fire when a key is pressed down
 hookman.KeyDown = kbpressevent
 #Define our callback to fire when a key is released
@@ -37,12 +42,6 @@ hookman.KeyUp = kbreleaseevent
 hookman.HookKeyboard()
 #Start our listener
 hookman.start()
-    
-#Open the files to enter the data
-#raw_press = open("/home/tak/Desktop/keystroke/data/raw_press.txt" , "w")
-#raw_release = open("/home/tak/Desktop/keystroke/data/raw_release.txt", "w")
-raw_press = open("<file_location>" , "w")
-raw_release = open("<file_location>", "w")
 
 #Create a loop to keep the application running
 running = True
