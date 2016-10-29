@@ -4,22 +4,16 @@ import pyxhook
 def kbpressevent( event ):
     
     #print key info
+    #print(event)
     global raw_press
-    #When the key is Backspace, it is represented by a prefix "-" in the file. So that line and the preevious line is not to be considered
-    if event.Ascii == 8:
-        raw_press.write("-"+ str(event)+"\n")
-    else:
-        raw_press.write(str(event)+"\n")
+    raw_press.write(str(event)+"\n")
 
 def kbreleaseevent( event ):
 	
     #print key info
+    #print(event)
     global raw_release
-    #When the key is Backspace, it is represented by a prefix "-" in the file. So that line and the preevious line is not to be considered
-    if event.Ascii == 8:
-        raw_release.write("-"+ str(event)+"\n")
-    else:
-        raw_release.write(str(event)+"\n")
+    raw_release.write(str(event)+"\n")
 
     #If the ascii value matches enter, terminate the while loop
     if event.Ascii == 13:
