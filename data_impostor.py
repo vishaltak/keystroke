@@ -17,6 +17,7 @@ with open(save_path + "impostor.txt", "w") as av:
 			for session_type in s_type:
 				for session in os.listdir(database_folder + user + session_type):
 					if os.path.isdir(database_folder + user + session_type + session):
+						av.write(str(int(user[-3:len(user)])) + ' ')						
 						with open(database_folder + user + session_type + session + r'/pr.txt') as f:
 							data = []
 							for line in f:
@@ -24,9 +25,9 @@ with open(save_path + "impostor.txt", "w") as av:
 								rowdata = map(float, fields)
 								data.extend(rowdata)
 							avgpr = sum(data)/len(data)
-							print(data)
-							print(avgpr)
-						av.write("%d, " %avgpr)
+							#print(data)
+							#print(avgpr)
+						av.write("%d " %avgpr)
 
 						with open(database_folder + user + session_type + session + r'/pp.txt') as f:
 							data = []
@@ -35,7 +36,7 @@ with open(save_path + "impostor.txt", "w") as av:
 								rowdata = map(float, fields)
 								data.extend(rowdata)
 							avgpp = sum(data)/len(data)
-						av.write("%d, " %avgpp)
+						av.write("%d " %avgpp)
 
 						with open(database_folder + user + session_type + session + r'/rp.txt') as f:
 							data = []
@@ -44,7 +45,7 @@ with open(save_path + "impostor.txt", "w") as av:
 								rowdata = map(float, fields)
 								data.extend(rowdata)
 							avgrp = sum(data)/len(data)
-						av.write("%d, " %avgrp)
+						av.write("%d " %avgrp)
 
 						with open(database_folder + user + session_type + session + r'/rr.txt') as f:
 							data = []
@@ -53,12 +54,12 @@ with open(save_path + "impostor.txt", "w") as av:
 								rowdata = map(float, fields)
 								data.extend(rowdata)
 							avgrr = sum(data)/len(data)
-						av.write("%d, " %avgrr)
+						av.write("%d " %avgrr)
 						with open(database_folder + user + session_type + session + r'/total.txt') as f:
 							total = f.readlines() 
-							av.write(total[0]+ ', ')
+							av.write(total[0])
 
-						av.write(str(int(user[-3:len(user)])) +'\n')
+						av.write(' 0\n')
 						print(user)
 
 		except NotADirectoryError:
