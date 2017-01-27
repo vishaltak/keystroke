@@ -1,7 +1,7 @@
 import os
 import shutil
 
-database_folder = r"/media/tak/4650AF4250AF3817/BE Project/Database/GREYC-Web based KeyStroke dynamics Dataset/"
+database_folder = r"/mnt/4650AF4250AF3817/Work/BE Project/Database/GREYC-Web based KeyStroke dynamics Dataset/"
 user_path = database_folder + r"database/users/"
 path = database_folder + r"database/passwords/"
 save_path = database_folder + r"custom_dataset/"
