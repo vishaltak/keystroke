@@ -1,10 +1,10 @@
 import os
 import shutil
 
-database_folder = r"/home/riddhi/keystroke/output_numpy/"
+database_folder = r"/home/riddhi/keystroke/data/custom_datas/"
 user_path = database_folder + r"users/"
 path = database_folder + r"passwords/"
-save_path = database_folder + r"custom_dataset/"
+save_path = database_folder + r"custom_datas/"
 
 for user in os.listdir(path):
     # save the user_id, username and password
@@ -14,7 +14,6 @@ for user in os.listdir(path):
     for i in range(0,3):
         save_user.write(user_details.readline())
     save_user.close()
-
     s_type = ["/genuine/", "/impostor/"]
     l = path + user
     s_l = save_path + user
@@ -26,6 +25,11 @@ for user in os.listdir(path):
                     location = l + session_type + session
                     save_location = s_l + session_type + str(counter) + "/"
                     os.makedirs(save_location)
+                    shutil.copyfile(location + "/userid.txt", save_location + "userid.txt")
+                    shutil.copyfile(location + "/date.txt", save_location + "date.txt")
+                    shutil.copyfile(location + "/genuine.txt", save_location + "genuine.txt")
+                    shutil.copyfile(location + "/password.txt", save_location + "password.txt")
+                    shutil.copyfile(location + "/p_release_codes.txt", save_location + "p_release_codes.txt")
                     shutil.copyfile(location + "/p_raw_press.txt", save_location + "raw_press.txt")
                     shutil.copyfile(location + "/p_raw_release.txt", save_location + "raw_release.txt")
                     shutil.copyfile(location + "/p_pp.txt", save_location + "pp.txt")
@@ -33,6 +37,7 @@ for user in os.listdir(path):
                     shutil.copyfile(location + "/p_pr.txt", save_location + "pr.txt")
                     shutil.copyfile(location + "/p_rp.txt", save_location + "rp.txt")
                     shutil.copyfile(location + "/p_total.txt", save_location + "total.txt")
+
                     counter += 1
     except NotADirectoryError:
         pass
