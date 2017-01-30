@@ -23,7 +23,6 @@ with open(save_path + "impostor.txt", "w") as av:
 			for session_type in s_type:
 				for session in os.listdir(database_folder + user + session_type):
 					if os.path.isdir(database_folder + user + session_type + session):
-
 						av.write(str(int(user[-3:len(user)])) + ",")
 
 						with open(database_folder + user + session_type + session + r'/date.txt') as f:
