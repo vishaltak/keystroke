@@ -1,5 +1,5 @@
 import pandas as pd
-import numpy
+import numpy as np
 from scipy.sparse import csr_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction import FeatureHasher
@@ -16,15 +16,16 @@ for user in keystroke_data.id.unique():
 	hash_length= pow(hash_length, 2)
 
 	X = user_keystroke_data[['release_codes', 'pp', 'pr', 'rp', 'rr', 'total']]
-	y = user_keystroke_data['genuine']
+	y = user_keystroke_data[['genuine']]
 
-	print("==== X before transformation =====")
-	print("====X type: {}".format(type(X)))
-	print("====y type: {}".format(type(y)))
-	print(X.shape)
+	print("==== Before transformation =====")
+	print("X type: {}".format(type(X)))
+	print("X shape: {}".format(X.shape))
+	print("y type: {}".format(type(y)))
+	print("y shape: {}".format(y.shape))
 
 	# TODO: sort this shit out
-	hasher= FeatureHasher(n_features=10, input_type='pair', non_negative=True)
+	hasher= FeatureHasher(n_features=10, input_type='dict', non_negative=False)
 
 	X_transformed= []
 	for i in range(no_of_samples):
@@ -38,21 +39,29 @@ for user in keystroke_data.id.unique():
 		rr = list(map(int, temp_X.rr.split()))
 		for j in range(0, len(rc)-1):
 			temp_list.append({'rc':rc[j], 'pp':pp[j], 'pr':pr[j], 'rp':rp[j], 'rr':rr[j]})
-		X_transformed.append(hasher.transform(temp_list))
+		print(hasher.transform(temp_list).todense())
+		X_transformed.append(hasher.transform(temp_list).todense())
 
 	X_transformed = pd.DataFrame(X_transformed)
 	# X_transformed = X_transformed.fillna(method='pad', axis=1)
 	with open(r'output.csv', 'w') as file:
-		file.write(X_transformed.to_dense().to_csv())
+		file.write(X_transformed.to_csv())
 
-	print("==== X before transformation =====")
-	print(X_transformed.shape)
+	print("==== After transformation =====")
+	print("X_transformed shape: {}".format(X_transformed.shape))
 
-	X_train, X_test, y_train, y_test = train_test_split(pd.DataFrame(X_transformed), y, test_size=0.4, random_state=0)
-	print("====X_train type: {}".format(type(X_train)))
+	X_train, X_test, y_train, y_test = train_test_split(X_transformed, y, test_size=0.4, random_state=0)
+	print("X_train type: {}".format(type(X_train)))
+
+	#print(X_train)
+	#print("y_train shape: {}".format(y_train.shape))
+	#print(X_train)
+	#print(X_train.shape)
+	#print(y_train)
+	#print(y_train.shape)
 	# SVM
 	svm_clf = OneClassSVM(kernel='poly')
-	svm_clf.fit(X_train,y_train)
+	svm_clf.fit(X_train, y_train)
 	prediction_results= svm_clf.predict(X_test)
 	counter= Counter(prediction_results)
 	correct_preditions = counter.get(1.0, 0)
