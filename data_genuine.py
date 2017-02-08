@@ -7,7 +7,7 @@ database_folder = r"/home/riddhi/keystroke/data/custom_datas/"
 save_path = r"/home/riddhi/keystroke/data/"
 data = []
 counter = 1
-with open(save_path + "genuine.txt", "w") as av:
+with open(save_path + "genuine.csv", "w") as av:
 	with open(save_path + r'/feilds.txt') as f:
 		fd = f.read().splitlines()
 	feildnames = fd[0]
@@ -34,45 +34,36 @@ with open(save_path + "genuine.txt", "w") as av:
 							genuine = f.readlines() 
 							av.write(genuine[0] + ",")
 						
-						with open(database_folder + user + session_type + session + r'/password.txt') as f:
-							password = f.readlines() 
-							av.write(password[0] + ",")
-						
 						with open(database_folder + user + session_type + session + r'/p_release_codes.txt') as f:
 							release = f.read().splitlines()
 						r = release[0]
 						rcode = r.split()
 						rc = ' '.join(rcode)
 						av.write(rc + ",")
-						
 						with open(database_folder + user + session_type + session + r'/pp.txt') as f:
 							temp = []
 							for line in f:
 								temp.append(line.strip('\n'))
 							pp = ' '.join(temp)
 						av.write(pp + ",")
-						
 						with open(database_folder + user + session_type + session + r'/pr.txt') as f:
 							temp = []
 							for line in f:
 								temp.append(line.strip('\n'))
 							pr = ' '.join(temp)
 						av.write(pr+ ",")
-						
 						with open(database_folder + user + session_type + session + r'/rp.txt') as f:
 							temp = []
 							for line in f:
 								temp.append(line.strip('\n'))
 							rp = ' '.join(temp)
 						av.write(rp+ ",")
-						
 						with open(database_folder + user + session_type + session + r'/rr.txt') as f:
 							temp = []
 							for line in f:
 								temp.append(line.strip('\n'))
 							rr = ' '.join(temp)
 						av.write(rr+ ",")
-
 						with open(database_folder + user + session_type + session + r'/pp.txt') as f:
 							data = []
 							for line in f:
@@ -80,8 +71,8 @@ with open(save_path + "genuine.txt", "w") as av:
 								rowdata = map(float, fields)
 								data.extend(rowdata)
 							avgpp = sum(data)/len(data)
-						av.write("%d," %avgpp)
 
+						av.write("%d," %avgpp)
 						with open(database_folder + user + session_type + session + r'/pr.txt') as f:
 							data = []
 							for line in f:
@@ -91,8 +82,8 @@ with open(save_path + "genuine.txt", "w") as av:
 							avgpr = sum(data)/len(data)
 							#print(data)
 							#print(avgpr)
-						av.write("%d," %avgpr)
 
+						av.write("%d," %avgpr)
 						with open(database_folder + user + session_type + session + r'/rp.txt') as f:
 							data = []
 							for line in f:
@@ -100,6 +91,7 @@ with open(save_path + "genuine.txt", "w") as av:
 								rowdata = map(float, fields)
 								data.extend(rowdata)
 							avgrp = sum(data)/len(data)
+
 						av.write("%d," %avgrp)
 
 						with open(database_folder + user + session_type + session + r'/rr.txt') as f:
@@ -109,8 +101,8 @@ with open(save_path + "genuine.txt", "w") as av:
 								rowdata = map(float, fields)
 								data.extend(rowdata)
 							avgrr = sum(data)/len(data)
-						av.write("%d," %avgrr)
-						
+
+						av.write("%d," %avgrr)						
 						with open(database_folder + user + session_type + session + r'/total.txt') as f:
 							total = f.readlines()
 							av.write(total[0] + "\n")
