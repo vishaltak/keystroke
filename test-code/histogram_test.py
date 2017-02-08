@@ -10,7 +10,6 @@ from collections import Counter
 
 def hist_from_string(intervals, bins=np.linspace(0, 1000, 11)):
 	lst = [int(value) for value in intervals.split()]
-	bins = np.linspace(0, max(lst)+100)
 	print(bins)
 	h, _ = np.histogram(lst, bins=bins, density=True)
 	#print(" _ = {}".format( _))
