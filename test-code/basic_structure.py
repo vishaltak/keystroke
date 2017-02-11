@@ -48,7 +48,6 @@ for result in results:
 	correct_preditions= result.get('data').get('correct_preditions')
 	wrong_preditions= result.get('data').get('wrong_preditions')
 	accuracy= correct_preditions/(correct_preditions + wrong_preditions)*100
-
 	print("User: {} => Classifier: {} => Correct: {}, Wrong: {}, Accuracy: {:.2f}%"
 		.format(
 			str(user).rjust(3), 
