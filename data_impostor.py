@@ -7,7 +7,7 @@ database_folder = r"/home/riddhi/keystroke/data/custom_datas/"
 save_path = r"/home/riddhi/keystroke/data/"
 data = []
 counter = 1
-with open(save_path + "impostor.txt", "w") as av:
+with open(save_path + "impostor.csv", "w") as av:
 	with open(save_path + r'/feilds.txt') as f:
 		fd = f.read().splitlines()
 	feildnames = fd[0]

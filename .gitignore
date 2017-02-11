@@ -92,4 +92,5 @@ ENV/
 
 # Custom settings
 data/custom_datas
+data/graphs
 test-code/
