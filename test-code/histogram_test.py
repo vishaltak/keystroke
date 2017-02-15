@@ -10,7 +10,7 @@ from collections import Counter
 
 def hist_from_string(intervals, bins=np.linspace(0, 1000, 11)):
 	lst = [int(value) for value in intervals.split()]
-	print(bins)
+	#print(bins)
 	h, _ = np.histogram(lst, bins=bins, density=True)
 	#print(" _ = {}".format( _))
 	return h
@@ -22,7 +22,7 @@ def hists_from_data(arr):
 			feats.append(hist_from_string(intervals))
 	return np.asarray(feats).reshape(arr.shape[0], -1)
 
-keystroke_data = pd.read_csv(r'/home/riddhi/Desktop/test/genuine2.csv', header=0)
+keystroke_data = pd.read_csv(r'../data/genuine_user_cleaned.csv', header=0)
 keystroke_data = keystroke_data.values
 user_list = keystroke_data[:, 0]
 user_list = np.unique(user_list)
