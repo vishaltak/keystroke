@@ -1,8 +1,12 @@
+import sys
+sys.path.append(r'/home/riddhi/keystroke/processing_utils')
+
 import pandas as pd
 import numpy as np
 import pprint
 
 from collections import Counter
+from data import split_data
 
 from sklearn.svm import OneClassSVM
 from sklearn.ensemble import AdaBoostClassifier
@@ -10,22 +14,9 @@ from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import IsolationForest
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.neural_network import MLPClassifier
 
-def split_data(X):
-	data = []
-	for i in range(0, X.shape[0]):
-		tempX = X.iloc[i]
-		pp = [int(value) for value in tempX.pp.split()]
-		pr = [int(value) for value in tempX.pr.split()]
-		rp = [int(value) for value in tempX.rp.split()]
-		rr = [int(value) for value in tempX.rr.split()]
-		misc = [int(tempX.ppavg), int(tempX.rpavg), int(tempX.rravg), int(tempX.pravg), int(tempX.total)]
-		temp_data = tuple(pp) + tuple(rp) + tuple(rr) + tuple(pr)  + tuple(misc)
-		data.append(temp_data)
-	data = pd.DataFrame.from_records(data)
-	return data
-
-keystroke_data = pd.read_csv(r'../data/genuine_user_cleaned.csv', header= 0)
+keystroke_data = pd.read_csv(r'../data/impostor_user.csv', header= 0)
 results = []
 overall_correct_total = 0
 overall_wrong_total = 0
@@ -42,6 +33,8 @@ names = [
 classifiers = [
 	# OneClassSVM(kernel='linear'), 
 	IsolationForest(random_state=rng)
+	#DecisionTreeClassifier(max_depth=5)
+	#MLPClassifier(alpha=1)
 	# DecisionTreeClassifier()
 	# GradientBoostingClassifier()
 	# AdaBoostClassifier()

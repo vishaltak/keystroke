@@ -1,66 +1,20 @@
+import sys
+sys.path.append(r'/home/riddhi/keystroke/processing_utils')
+
 import pandas as pd
 import numpy as np
 import pprint
 
 from collections import Counter
+from data import get_hashed_matrix
 
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import IsolationForest
-from sklearn.feature_extraction import FeatureHasher
 from sklearn.model_selection import train_test_split
 from sklearn.svm import OneClassSVM
 from sklearn.tree import DecisionTreeClassifier
-
-hasher= FeatureHasher(n_features=10, input_type='dict', non_negative=True, dtype='int64')
-
-def get_hashed_matrix(X, y):
-	X_transformed= []
-	y_transformed= []
-	temp_list = []
-	for i in range(X.shape[0]):
-		tempX = X.iloc[i]
-		rc = list(tempX.release_codes.split())
-		pp = list(map(int, tempX.pp.split()))
-		pr = list(map(int, tempX.pr.split()))
-		rp = list(map(int, tempX.rp.split()))
-		rr = list(map(int, tempX.rr.split()))
-		temp_dict = {}
-		for j in range(0, len(rc)-1):
-			index_str = 'pp.'+ rc[j+1] + '.' + rc[j]
-			while temp_dict.get(index_str, -1) != -1:
-				index_str = '_' + index_str
-			temp_dict[index_str] = pp[j]
-
-			index_str = 'rp.'+ rc[j+1] + '.' + rc[j]
-			while temp_dict.get(index_str, -1) != -1:
-				index_str = '_' + index_str
-			temp_dict[index_str] = rp[j]
-
-			index_str = 'rr.'+ rc[j+1] + '.' + rc[j]
-			while temp_dict.get(index_str, -1) != -1:
-				index_str = '_' + index_str
-			temp_dict[index_str] = rr[j]
-
-			index_str = 'pr.'+ rc[j]
-			while temp_dict.get(index_str, -1) != -1:
-				index_str = '_' + index_str
-			temp_dict[index_str] = pr[j]
-
-		index_str = 'pr.'+ rc[-1]
-		while temp_dict.get(index_str, -1) != -1:
-			index_str = '_' + index_str
-		temp_dict[index_str] = pr[-1]
-		temp_dict['ppavg'] = tempX.ppavg
-		temp_dict['pravg'] = tempX.pravg
-		temp_dict['rpavg'] = tempX.rpavg
-		temp_dict['rravg'] = tempX.rravg
-		temp_dict['total'] = tempX.total
-		temp_list.append(temp_dict)
-		y_transformed.append(1)
-	X_transformed = pd.DataFrame(hasher.fit_transform(temp_list).todense())
-	y_transformed = pd.DataFrame(y_transformed)
-	return X_transformed, y_transformed
+from sklearn.neural_network import MLPClassifier
 
 
 keystroke_data = pd.read_csv(r'../data/genuine_user.csv', header= 0)
@@ -79,7 +33,9 @@ names = [
 
 classifiers = [
 	# OneClassSVM(kernel='linear'), 
-	IsolationForest(random_state=rng)
+	#IsolationForest(random_state=rng)
+	#DecisionTreeClassifier(max_depth=5)
+	MLPClassifier(alpha=1)
 	# DecisionTreeClassifier()
 	# GradientBoostingClassifier()
 	# AdaBoostClassifier()
@@ -121,8 +77,8 @@ for user in keystroke_data.id.unique():
 				y_train = X_train.append(temp_data_y)
 				X_test = X[end_index:]
 				y_test = y[end_index:]
-
-				clf.fit(X_train, X_test)
+				clf.fit(X_train.iloc(len(X_train).to_frame(), 1), X_test)
+				#clf.fit(X_train, X_test)
 				prediction_results= clf.predict(X_test)
 				counter= Counter(prediction_results)
 				correct_preditions = counter.get(1.0, 0)
