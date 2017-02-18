@@ -1,5 +1,6 @@
 import sys
-sys.path.append(r'/home/riddhi/keystroke/processing_utils')
+# sys.path.append(r'/home/riddhi/keystroke/processing_utils')
+sys.path.append(r'/mnt/4650AF4250AF3817/Work/BE Project/keystroke/processing_utils')
 
 import pandas as pd
 import numpy as np
@@ -18,36 +19,42 @@ from sklearn.neural_network import MLPClassifier
 
 
 keystroke_data = pd.read_csv(r'../data/genuine_user.csv', header= 0)
-results = []
+impostor_data = pd.read_csv(r'../data/impostor_user.csv', header= 0)
 overall_correct_total = 0
 overall_wrong_total = 0
 rng = np.random.RandomState(42)
 
 names = [
 	# "OC-SVM", 
-	"Isolation Forest Ensemble"
-	# "Decision Tree"
-	# "Gradient Boosting Classifier"
-	# "AdaBoost Classifier"
+	"Isolation Forest Ensemble",
+	# "Decision Tree", 
+	# "Gradient Boosting Classifier", 
+	# "AdaBoost Classifier", 
 ]
 
 classifiers = [
 	# OneClassSVM(kernel='linear'), 
-	#IsolationForest(random_state=rng)
-	#DecisionTreeClassifier(max_depth=5)
-	MLPClassifier(alpha=1)
-	# DecisionTreeClassifier()
-	# GradientBoostingClassifier()
+	IsolationForest(random_state=rng), 
+	# DecisionTreeClassifier(), 
+	# GradientBoostingClassifier(), 
 	# AdaBoostClassifier()
+
 ]
 
+# for user in keystroke_data.id.unique():
 for user in keystroke_data.id.unique():
 	#print("User {}".format(user))
 	user_keystroke_data= keystroke_data[keystroke_data['id'] == user]
+	user_impostor_data= impostor_data[impostor_data['id'] == user]
+
 	X = user_keystroke_data[['release_codes', 'pp','pr', 'rp', 'rr', 'ppavg', 'pravg', 'rpavg', 'rravg', 'total']]
 	y = user_keystroke_data['genuine']
 	X, y = get_hashed_matrix(X, y)
 	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)
+
+	X_impostor = user_impostor_data[['release_codes', 'pp','pr', 'rp', 'rr', 'ppavg', 'pravg', 'rpavg', 'rravg', 'total']]
+	y_impostor = user_impostor_data['genuine']
+	X_impostor, y_impostor = get_hashed_matrix(X_impostor, y_impostor)
 
 	print("\n{0:*^80}".format("User " + str(user)))
 
@@ -77,24 +84,40 @@ for user in keystroke_data.id.unique():
 				y_train = X_train.append(temp_data_y)
 				X_test = X[end_index:]
 				y_test = y[end_index:]
-				clf.fit(X_train.iloc(len(X_train).to_frame(), 1), X_test)
-				#clf.fit(X_train, X_test)
+
+				clf.fit(X_train, y_train)				
 				prediction_results= clf.predict(X_test)
 				counter= Counter(prediction_results)
 				correct_preditions = counter.get(1.0, 0)
 				wrong_preditions = counter.get(-1.0, 0)
-				# results.append({'user':user, 'classifier':name, 
-				# 	'data':{'correct_preditions':correct_preditions, 'wrong_preditions':wrong_preditions}
-				# })
 				accuracy = correct_preditions/(correct_preditions + wrong_preditions)*100
 				correct_total += correct_preditions
 				wrong_total +=wrong_preditions
-				print("Iteration {} => Accuracy {:.2f}"
+				print("Iteration {}-G => Accuracy {:.2f}"
 					.format(
 						str(iteration_number).rjust(2), 
 						accuracy
 					)
 				)
+
+				if X_impostor.shape[0] >20:
+					prediction_results= clf.predict(X_impostor.sample(n=20))
+				else:
+					prediction_results= clf.predict(X_impostor)
+				counter= Counter(prediction_results)
+				correct_preditions = counter.get(-1.0, 0)
+				wrong_preditions = counter.get(1.0, 0)
+				accuracy = correct_preditions/(correct_preditions + wrong_preditions)*100
+				correct_total += correct_preditions
+				wrong_total +=wrong_preditions
+				print("Iteration {}-I => Accuracy {:.2f}"
+					.format(
+						str(iteration_number).rjust(2), 
+						accuracy
+					)
+				)
+
+
 
 				start_index = end_index
 				end_index = start_index + step
@@ -117,18 +140,3 @@ print("Overall accuracy of system {:.2f}"
 		overall_correct_total/(overall_correct_total + overall_wrong_total) * 100
 	)
 )
-
-# # results are only for positive samples. negactive samples have not yet been tested
-# for result in results:
-# 	user= result.get('user')
-# 	classifier= result.get('classifier')
-# 	correct_preditions= result.get('data').get('correct_preditions')
-# 	wrong_preditions= result.get('data').get('wrong_preditions')
-# 	accuracy= correct_preditions/(correct_preditions + wrong_preditions)*100
-# 	print("User: {} => Classifier: {}, Accuracy: {:.2f}%"
-# 		.format(
-# 			str(user).rjust(3), 
-# 			str(classifier).rjust(6), 
-# 			accuracy
-# 		)
-# 	)
