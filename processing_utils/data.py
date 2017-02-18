@@ -17,9 +17,8 @@ def split_data(X):
 
 hasher= FeatureHasher(n_features=10, input_type='dict', non_negative=True, dtype='int64')
 
-def get_hashed_matrix(X, y):
+def get_hashed_matrix(X):
 	X_transformed= []
-	y_transformed= []
 	temp_list = []
 	for i in range(X.shape[0]):
 		tempX = X.iloc[i]
@@ -60,8 +59,6 @@ def get_hashed_matrix(X, y):
 		temp_dict['rravg'] = tempX.rravg
 		temp_dict['total'] = tempX.total
 		temp_list.append(temp_dict)
-		y_transformed.append(1)
 	X_transformed = pd.DataFrame(hasher.fit_transform(temp_list).todense())
-	y_transformed = pd.DataFrame(y_transformed)
-	return X_transformed, y_transformed
+	return X_transformed
 

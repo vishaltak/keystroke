@@ -49,12 +49,12 @@ for user in keystroke_data.id.unique():
 
 	X = user_keystroke_data[['release_codes', 'pp','pr', 'rp', 'rr', 'ppavg', 'pravg', 'rpavg', 'rravg', 'total']]
 	y = user_keystroke_data['genuine']
-	X, y = get_hashed_matrix(X, y)
+	X = get_hashed_matrix(X)
 	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)
 
 	X_impostor = user_impostor_data[['release_codes', 'pp','pr', 'rp', 'rr', 'ppavg', 'pravg', 'rpavg', 'rravg', 'total']]
 	y_impostor = user_impostor_data['genuine']
-	X_impostor, y_impostor = get_hashed_matrix(X_impostor, y_impostor)
+	X_impostor = get_hashed_matrix(X_impostor)
 
 	print("\n{0:*^80}".format("User " + str(user)))
 
