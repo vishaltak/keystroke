@@ -72,7 +72,7 @@ for user in keystroke_data.id.unique():
 					X_train = X_train[step:]
 					y_train = y_train[step:]
 				X_train = X_train.append(temp_data_X)
-				y_train = X_train.append(temp_data_y)
+				y_train = y_train.append(temp_data_y)
 				X_test = X[end_index:]
 				y_test = y[end_index:]
 
