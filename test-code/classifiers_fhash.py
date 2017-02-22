@@ -1,6 +1,6 @@
 import sys
-# sys.path.append(r'/home/riddhi/keystroke/processing_utils')
-sys.path.append(r'/mnt/4650AF4250AF3817/Work/BE Project/keystroke/processing_utils')
+sys.path.append(r'/home/riddhi/keystroke/processing_utils')
+# sys.path.append(r'/mnt/4650AF4250AF3817/Work/BE Project/keystroke/processing_utils')
 
 import pandas as pd
 import numpy as np
@@ -9,6 +9,7 @@ import pprint
 from collections import Counter
 from data import get_hashed_matrix
 
+from sklearn.covariance import EllipticEnvelope
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import IsolationForest
@@ -18,27 +19,29 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.neural_network import MLPClassifier
 
 
-keystroke_data = pd.read_csv(r'../data/genuine_user.csv', header= 0)
-impostor_data = pd.read_csv(r'../data/impostor_user.csv', header= 0)
+keystroke_data = pd.read_csv(r'../data/genuine_user_EE.csv', header= 0)
+impostor_data = pd.read_csv(r'../data/impostor_user_EE.csv', header= 0)
 overall_correct_total = 0
 overall_wrong_total = 0
 rng = np.random.RandomState(42)
 
 names = [
 	# "OC-SVM", 
-	"Isolation Forest Ensemble",
+	# "Isolation Forest Ensemble",
 	# "Decision Tree", 
 	# "Gradient Boosting Classifier", 
 	# "AdaBoost Classifier", 
+	"Elliptic Envelope"
+
 ]
 
 classifiers = [
 	# OneClassSVM(kernel='linear'), 
-	IsolationForest(random_state=rng), 
+	# IsolationForest(random_state=rng), 
 	# DecisionTreeClassifier(), 
 	# GradientBoostingClassifier(), 
 	# AdaBoostClassifier()
-
+	EllipticEnvelope()
 ]
 
 # for user in keystroke_data.id.unique():
@@ -49,12 +52,12 @@ for user in keystroke_data.id.unique():
 
 	X = user_keystroke_data[['release_codes', 'pp','pr', 'rp', 'rr', 'ppavg', 'pravg', 'rpavg', 'rravg', 'total']]
 	y = user_keystroke_data['genuine']
-	X = get_hashed_matrix(X)
+	X, y = get_hashed_matrix(X, y)
 	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)
 
 	X_impostor = user_impostor_data[['release_codes', 'pp','pr', 'rp', 'rr', 'ppavg', 'pravg', 'rpavg', 'rravg', 'total']]
 	y_impostor = user_impostor_data['genuine']
-	X_impostor = get_hashed_matrix(X_impostor)
+	X_impostor, y_impostor = get_hashed_matrix(X_impostor, y_impostor)
 
 	print("\n{0:*^80}".format("User " + str(user)))
 
