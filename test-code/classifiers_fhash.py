@@ -9,6 +9,7 @@ import pprint
 from collections import Counter
 from data import get_hashed_matrix
 
+from sklearn.covariance import EllipticEnvelope
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import IsolationForest
@@ -19,8 +20,8 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import RadiusNeighborsClassifier
 
 
-keystroke_data = pd.read_csv(r'../data/genuine_user.csv', header= 0)
-impostor_data = pd.read_csv(r'../data/impostor_user.csv', header= 0)
+keystroke_data = pd.read_csv(r'../data/genuine_user_EE.csv', header= 0)
+impostor_data = pd.read_csv(r'../data/impostor_user_EE.csv', header= 0)
 overall_correct_total = 0
 overall_wrong_total = 0
 rng = np.random.RandomState(42)
@@ -32,15 +33,17 @@ names = [
 	# "Gradient Boosting Classifier", 
 	# "AdaBoost Classifier", 
 	# "Radius Nearest Neighbor", 
+	"Elliptic Envelope", 
 ]
 
 classifiers = [
 	# OneClassSVM(kernel='linear'), 
-	IsolationForest(random_state=rng), 
+	# IsolationForest(random_state=rng), 
 	# DecisionTreeClassifier(), 
 	# GradientBoostingClassifier(), 
-	# AdaBoostClassifier()
+	# AdaBoostClassifier(), 
 	# RadiusNeighborsClassifier(radius=12.0, outlier_label=-1), 
+	EllipticEnvelope(), 
 ]
 
 # for user in keystroke_data.id.unique():
@@ -52,6 +55,7 @@ for user in keystroke_data.id.unique():
 	X = user_keystroke_data[['release_codes', 'pp','pr', 'rp', 'rr', 'ppavg', 'pravg', 'rpavg', 'rravg', 'total']]
 	y = user_keystroke_data['genuine']
 	X = get_hashed_matrix(X)
+	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)
 
 	X_impostor = user_impostor_data[['release_codes', 'pp','pr', 'rp', 'rr', 'ppavg', 'pravg', 'rpavg', 'rravg', 'total']]
 	y_impostor = user_impostor_data['genuine']
