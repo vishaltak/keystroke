@@ -16,6 +16,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import OneClassSVM
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neural_network import MLPClassifier
+from sklearn.neighbors import RadiusNeighborsClassifier
 
 
 keystroke_data = pd.read_csv(r'../data/genuine_user.csv', header= 0)
@@ -26,10 +27,11 @@ rng = np.random.RandomState(42)
 
 names = [
 	# "OC-SVM", 
-	"Isolation Forest Ensemble",
+	"Isolation Forest Ensemble", 
 	# "Decision Tree", 
 	# "Gradient Boosting Classifier", 
 	# "AdaBoost Classifier", 
+	# "Radius Nearest Neighbor", 
 ]
 
 classifiers = [
@@ -38,7 +40,7 @@ classifiers = [
 	# DecisionTreeClassifier(), 
 	# GradientBoostingClassifier(), 
 	# AdaBoostClassifier()
-
+	# RadiusNeighborsClassifier(radius=12.0, outlier_label=-1), 
 ]
 
 # for user in keystroke_data.id.unique():
@@ -50,7 +52,6 @@ for user in keystroke_data.id.unique():
 	X = user_keystroke_data[['release_codes', 'pp','pr', 'rp', 'rr', 'ppavg', 'pravg', 'rpavg', 'rravg', 'total']]
 	y = user_keystroke_data['genuine']
 	X = get_hashed_matrix(X)
-	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)
 
 	X_impostor = user_impostor_data[['release_codes', 'pp','pr', 'rp', 'rr', 'ppavg', 'pravg', 'rpavg', 'rravg', 'total']]
 	y_impostor = user_impostor_data['genuine']

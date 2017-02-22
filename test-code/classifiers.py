@@ -42,7 +42,7 @@ classifiers = [
 for user in keystroke_data.id.unique():
 	#print("User {}".format(user))
 	user_keystroke_data= keystroke_data[keystroke_data['id'] == user]
-	X = user_keystroke_data[['release_codes', 'pp','pr', 'rp', 'rr', 'ppavg', 'pravg', 'rpavg', 'rravg', 'total']]
+	X = user_keystroke_data[['release_codes', 'pp', 'pr', 'rp', 'rr', 'ppavg', 'pravg', 'rpavg', 'rravg', 'total']]
 	y = user_keystroke_data['genuine']
 	X = split_data(X)
 	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)
