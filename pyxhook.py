@@ -231,7 +231,8 @@ class pyxhookkeyevent:
         self.Timestamp = Timestamp
     
     def __str__(self):
-        return str(self.VirtualCode)+ " "+ str(self.Timestamp)
+
+        return str(self.Key)+ " " + str(self.VirtualCode) + " " + str(self.Timestamp)
         #return "Key Pressed: " + str(self.Key) + "\nAscii Value: " + str(self.Ascii) + "\nScanCode: " + str(self.ScanCode) + "\nMessageName: " + str(self.MessageName) + "\nTimestamp: " + str(self.Timestamp) + "\n"
 
 #######################################################################
