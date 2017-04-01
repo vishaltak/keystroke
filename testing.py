@@ -14,12 +14,12 @@ from sklearn.externals import joblib
 from termios import tcflush, TCIOFLUSH
 
 def testModel(userId):
-    print('Let us test the created model')
+    # print('Let us test the created model')
     db = DBConnection()
     dbUsername, dbPassword = db.getUserCredentials(userId)
     username = input('Enter username:\n').strip()
     if username != dbUsername:
-        print('Removed the sample as username did not match')
+        print('Invalid username')
         return
     print('Enter password:')
     user = linuxGetTimelog.User(userId, dbUsername, dbPassword)
@@ -49,5 +49,6 @@ def testModel(userId):
             print('Welcome')
         else:
             print('Stay away impostor!')
+    testModel(userId)
 
-# testModel(114)
+testModel(122)

@@ -28,10 +28,14 @@ def extractFeatures(userId, sessionId):
 	rp = []
 	rr = []
 	for i in range(0, len(rawPress)-1):
-		pp.append(rawPress[i+1] - rawPress[i])
-		pr.append(rawRelease[i] - rawPress[i])
-		rp.append(rawPress[i+1] - rawRelease[i])
-		rr.append(rawRelease[i+1] - rawRelease[i])
+		try:
+			pp.append(rawPress[i+1] - rawPress[i])
+			rp.append(rawPress[i+1] - rawRelease[i])
+			rr.append(rawRelease[i+1] - rawRelease[i])
+			pr.append(rawRelease[i] - rawPress[i])
+		except:
+			print('Check extraction.py for i={}'.format(i))
+			pass
 	pr.append(rawRelease[-1] - rawPress[-1])
 	total = rawRelease[-1] - rawPress[0]
 

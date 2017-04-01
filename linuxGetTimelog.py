@@ -8,6 +8,7 @@ class User:
     def __init__(self, id, dbUsername, dbPassword):
         self.date = time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime())
         self.directory = '/mnt/4650AF4250AF3817/Work/BE Project/keystroke/data/user_input/{}/{}/'.format(id, self.date)
+        
         if not os.path.exists(self.directory):
             os.makedirs(self.directory)
 
@@ -51,7 +52,16 @@ class User:
             self.count += 1
             self.rawReleaseFile = open(self.directory + 'raw_release.txt', 'w')
         else:
-            self.password += values[0]
+            if event.VirtualCode != None\
+                and (event.VirtualCode == 16 \
+                or event.VirtualCode == 32 \
+                or (event.VirtualCode >= 48 and event.VirtualCode <= 57) \
+                or (event.VirtualCode >= 65 and event.VirtualCode <= 90) \
+                or (event.VirtualCode >= 96 and event.VirtualCode <= 105) \
+                or (event.VirtualCode >= 186 and event.VirtualCode <= 192) \
+                or (event.VirtualCode >= 219 and event.VirtualCode <= 222)
+                ):
+                self.password += values[0]
             self.releaseCodes += ' ' + values[1]
 
     def startLogging(self):

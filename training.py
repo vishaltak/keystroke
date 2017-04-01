@@ -10,8 +10,8 @@ from sklearn.ensemble import IsolationForest
 from sklearn.externals import joblib
 
 # number of new samples required to create/update the model
-sampleSize = 2
-windowSize = 4
+sampleSize = 20
+windowSize = 100
 
 def trainModel(userId):
 	print('Training of model has started')
@@ -42,4 +42,4 @@ def trainModel(userId):
 	else:
 		pass
 
-# trainModel(91)
+# trainModel(122)

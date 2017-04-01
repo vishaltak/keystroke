@@ -16,7 +16,7 @@ def enroll():
     dbUsername, dbPassword = db.getUserCredentials(dbId)
     print('Starting the Enrollment process')
     counter = 0
-    while counter < 2:
+    while counter < 20:
         print('Sample => {}'.format(counter + 1))
         username = input('Enter username:\n').strip()
         if username != dbUsername:
